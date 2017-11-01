@@ -23,6 +23,7 @@
 #include "isv_profile.h"
 #include <OMX_IndexExt.h>
 #include <hal_public.h>
+#include <nativebase/nativebase.h>
 
 #include "OMX_adaptor.h"
 
@@ -710,7 +711,7 @@ OMX_ERRORTYPE ISVComponent::ISV_FillBufferDone(
         return OMX_ErrorUndefined;
     }
 
-    if(!mVPPEnabled || !mVPPOn || mVPPFlushing || pBuffer->nFilledLen == 0) {
+    if(!mVPPEnabled || !mVPPOn || mVPPFlushing || (pBuffer->nFilledLen == 0 && !(pBuffer->nFlags & OMX_BUFFERFLAG_EOS))) {
         ALOGD_IF(ISV_COMPONENT_DEBUG, "%s: FillBufferDone pBuffer %p, timeStamp %.2f ms", __func__, pBuffer, pBuffer->nTimeStamp/1E3);
         return mpCallBacks->FillBufferDone(&mBaseComponent, pAppData, pBuffer);
     }
